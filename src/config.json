@@ -1,0 +1,15 @@
+{
+  "base": "https://ellyrybina.ru/",
+  "channel": "elya_jellyfish",
+  "tag": "#блог",
+  "core": [
+    "diag",
+    "weekly"
+  ],
+  "sheet_id": "1Q3CETkByqzkBLhrsqUvkzlYNd0J8F8XBZxX1iEZosjk",
+  "gids": {
+    "prices": 339081205,
+    "reviews": 1248873929,
+    "blog": 1265818915
+  }
+}

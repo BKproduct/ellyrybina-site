@@ -1,0 +1,32 @@
+# Installed as .github/workflows/sync.yml in the live repository.
+name: site-sync
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: site-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 src/sync.py --root .
+      - name: Publish only when something changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A index.html status.html sitemap.xml blog data
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git -c user.name="site-sync" -c user.email="site-sync@users.noreply.github.com" commit -q -m "Content update"
+          git push -q
+          # a push made with GITHUB_TOKEN does not start a Pages build by itself
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds"
