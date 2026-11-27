@@ -2,7 +2,8 @@
 name: site-sync
 on:
   schedule:
-    - cron: "17 * * * *"
+    # four attempts an hour: GitHub delays and skips scheduled runs
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
