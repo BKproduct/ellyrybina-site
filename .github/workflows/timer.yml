@@ -1,0 +1,31 @@
+# Installed as .github/workflows/timer.yml in the live repository.
+# Starts the site builder again and again. GitHub's own cron skipped almost every run here (2026-11-27).
+# The pause between ticks is the wait timer of the "timer" environment (repository settings):
+# no runner is used while waiting, and no token or outside service is needed.
+name: site-timer
+on:
+  workflow_dispatch:
+  schedule:
+    # restarts the chain if it ever breaks
+    - cron: "41 * * * *"
+permissions:
+  actions: write
+concurrency:
+  group: site-timer
+  cancel-in-progress: false
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    environment: timer
+    timeout-minutes: 5
+    steps:
+      - name: Start the builder and book the next tick
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run sync.yml -R "$GITHUB_REPOSITORY" || echo "builder not started this time"
+          for attempt in 1 2 3 4 5; do
+            gh workflow run timer.yml -R "$GITHUB_REPOSITORY" && exit 0
+            sleep 20
+          done
+          exit 1

@@ -519,7 +519,7 @@ def render_blog(root, tpl, cfg, posts):
 def render_status(tpl, cfg, state, notes):
     def row(name, ok, good, bad):
         return f'<p><b>{"✅" if ok else "⚠️"} {name}.</b> {html.escape(good if ok else bad)}</p>'
-    body = (f"<h1>Состояние сайта</h1><p>Последнее изменение сайта: {state['changed_at']} (Москва). Проверка идёт каждый час.</p>"
+    body = (f"<h1>Состояние сайта</h1><p>Последнее изменение сайта: {state['changed_at']} (Москва). Проверка идёт каждые 15 минут.</p>"
             + row("Цены", not notes.get("prices"), f"прочитаны, форматов на сайте: {len(state['prices'])}", f"{notes.get('prices')}. Сайт показывает прежние цены.")
             + row("Отзывы", not notes.get("reviews"), f"прочитаны, отзывов на сайте: {len(state['reviews'])}", f"{notes.get('reviews')}. Сайт показывает прежние отзывы.")
             + row("Канал", not notes.get("channel"), f"читается, записей с {cfg['tag']}: {len(state['channel'])}", f"{notes.get('channel')}.")

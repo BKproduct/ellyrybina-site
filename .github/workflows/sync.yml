@@ -2,8 +2,8 @@
 name: site-sync
 on:
   schedule:
-    # four attempts an hour: GitHub delays and skips scheduled runs
-    - cron: "7,22,37,52 * * * *"
+    # backup only: the real timer is timer.yml
+    - cron: "37 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
